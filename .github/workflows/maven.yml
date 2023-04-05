@@ -69,6 +69,9 @@ jobs:
           draft: false
           prerelease: false
 
+      - name: Generate Snapshot
+        run: mvn versions:set -DnextSnapshot -DgenerateBackupPoms=false
+
       - name: GIT commit and push all changed files
         env:
           CI_COMMIT_MESSAGE: Generate Snapshot
