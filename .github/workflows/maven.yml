@@ -46,11 +46,11 @@ jobs:
       - name: Get version
         run: |
           VERSION=$( mvn help:evaluate -Dexpression=project.version -q -DforceStdout )
-          echo "proj_version=$VERSION" >> $GITHUB_OUTPUT
+          echo "PROJ_VERSION=$VERSION" >> $GITHUB_OUTPUT
         id: get_version
       - name: Print version
         run: |
-        echo "Version is: ${{ steps.get_version.outputs.proj_version }}"
+          echo "Version is: ${{ steps.get_version.outputs.PROJ_VERSION }}"
 
       - name: Dump env
         run: env | sort
