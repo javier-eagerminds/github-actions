@@ -28,6 +28,17 @@ jobs:
       - name: Tag release
         run: echo ${{ github.event.release.tag_name }}
 
+
+      - name: GIT commit and push all changed files
+        env:
+          CI_COMMIT_MESSAGE: Prepare for release
+          CI_COMMIT_AUTHOR: Continuous Integration
+        run: |
+          git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
+          git config --global user.email "ci@users.noreply.github.com"
+          git commit -a -m "${{ env.CI_COMMIT_MESSAGE }}"
+          git push
+
       - name: Set Release version env variable
         run: |
           echo "RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
@@ -35,8 +46,11 @@ jobs:
       - name: Get version
         run: |
           VERSION=$( mvn help:evaluate -Dexpression=project.version -q -DforceStdout )
-          echo "{name}={version}" >> $GITHUB_OUTPUT
+          echo "proj_version=$VERSION" >> $GITHUB_OUTPUT
         id: get_version
+      - name: Print version
+        run: |
+        echo "Version is: ${{ steps.get_version.outputs.proj_version }}"
 
       - name: Dump env
         run: env | sort
@@ -55,6 +69,16 @@ jobs:
           release_name: Release ${{ env.RELEASE_VERSION }}
           draft: false
           prerelease: false
+
+      - name: GIT commit and push all changed files
+        env:
+          CI_COMMIT_MESSAGE: Generate Snapshot
+          CI_COMMIT_AUTHOR: Continuous Integration
+        run: |
+          git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
+          git config --global user.email "ci@users.noreply.github.com"
+          git commit -a -m "${{ env.CI_COMMIT_MESSAGE }}"
+          git push
 
       - name: Run a one-line script
         run: echo Hello, world!
