@@ -8,6 +8,10 @@ on:
 
   workflow_dispatch:
 
+env:
+  CI_COMMIT_AUTHOR: Continuous Integration
+  CI_COMMIT_EMAIL: continuous_integration@noreply.eagerminds.tech
+
 jobs:
   build:
     permissions: write-all
@@ -32,10 +36,9 @@ jobs:
       - name: GIT commit and push all changed files
         env:
           CI_COMMIT_MESSAGE: Prepare for release
-          CI_COMMIT_AUTHOR: Continuous Integration
         run: |
           git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
-          git config --global user.email "ci@users.noreply.github.com"
+          git config --global user.email "${{ env.CI_COMMIT_EMAIL }}"
           git commit -a -m "${{ env.CI_COMMIT_MESSAGE }}"
 
       - name: Set Release version env variable
@@ -75,10 +78,9 @@ jobs:
       - name: GIT commit and push all changed files
         env:
           CI_COMMIT_MESSAGE: Generate Snapshot
-          CI_COMMIT_AUTHOR: Continuous Integration
         run: |
           git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
-          git config --global user.email "continuous_integration@eagerminds.tech"
+          git config --global user.email "${{ env.CI_COMMIT_EMAIL }}"
           git commit -a -m "${{ env.CI_COMMIT_MESSAGE }}"
           git push
 
