@@ -25,6 +25,7 @@ jobs:
           java-version: '17'
           distribution: 'oracle'
           cache: maven
+
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
@@ -40,6 +41,7 @@ jobs:
           CI_COMMIT_MESSAGE: Prepare for release
         run: |
           git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
+          git config --global user.email "${{ env.CI_COMMIT_EMAIL }}"
           git commit -a -m "${{ env.CI_COMMIT_MESSAGE }}"
 
       - name: Set Release version env variable
@@ -69,7 +71,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: v${{ env.RELEASE_VERSION }}
-          release_name: Release ${{ env.RELEASE_VERSION }}
+          release_name: "Release ${{ env.RELEASE_VERSION }} :rocket:"
           draft: false
           prerelease: false
 
@@ -81,6 +83,7 @@ jobs:
           CI_COMMIT_MESSAGE: Generate Snapshot
         run: |
           git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
+          git config --global user.email "${{ env.CI_COMMIT_EMAIL }}"
           git commit -a -m "${{ env.CI_COMMIT_MESSAGE }}"
           git push
 
